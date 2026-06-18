@@ -25,7 +25,7 @@ class FallDetectionModel:
         results = self._model.predict(frame, conf=self._conf, device=self._device, verbose=False)
         detections = []
         for r in results:
-            for box in r.boxes:
+            for box in (r.boxes or []):
                 label = r.names[int(box.cls)]
                 detections.append({
                     "label": label,
