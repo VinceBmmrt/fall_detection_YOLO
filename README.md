@@ -3,6 +3,8 @@
 > **EN** — Real-time human fall detection module for the Unitree G1 EDU security robot.  
 > **FR** — Module de détection de chute en temps réel pour le robot de sécurité Unitree G1 EDU.
 
+![Fall Detection in action](assets/fall_detection_screenshot.jpg)
+
 ---
 
 ## Context / Contexte
