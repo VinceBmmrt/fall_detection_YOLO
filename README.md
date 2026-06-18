@@ -19,6 +19,22 @@ G.E.R.O est conçu pour une démonstration en conditions réelles à l'**Aéropo
 
 ---
 
+## Model / Modèle
+
+### EN
+The detection model is a **pretrained YOLOv11** sourced from HuggingFace:
+[`melihuzunoglu/human-fall-detection`](https://huggingface.co/melihuzunoglu/human-fall-detection)
+
+We did not train this model ourselves — it was trained on a human posture dataset and published openly on HuggingFace. The weights (`best.pt`) are downloaded automatically at first run and cached locally. They are never committed to the repository.
+
+### FR
+Le modèle de détection est un **YOLOv11 pré-entraîné** récupéré sur HuggingFace :
+[`melihuzunoglu/human-fall-detection`](https://huggingface.co/melihuzunoglu/human-fall-detection)
+
+Nous n'avons pas entraîné ce modèle — il a été entraîné sur un jeu de données de postures humaines et publié librement sur HuggingFace. Les poids (`best.pt`) sont téléchargés automatiquement au premier lancement et mis en cache localement. Ils ne sont jamais commités dans le dépôt.
+
+---
+
 ## How it works / Fonctionnement
 
 ```
