@@ -3,6 +3,7 @@ import logging
 import time
 from abc import ABC, abstractmethod
 from collections import deque
+from typing import Deque
 from pathlib import Path
 
 import cv2
@@ -50,7 +51,7 @@ class AlertManager:
         self._handler = handler
         self._min_fall_frames = min_fall_frames
         self._cooldown = cooldown_seconds
-        self._window: deque[bool] = deque(maxlen=min_fall_frames)
+        self._window: Deque[bool] = deque(maxlen=min_fall_frames)
         self._last_alert: float = 0.0
 
     def update(self, is_fallen: bool, frame: np.ndarray) -> bool:

@@ -1,5 +1,6 @@
 """Model loading, inference, and frame annotation."""
 import logging
+from typing import Dict, List
 
 import cv2
 import numpy as np
@@ -8,8 +9,8 @@ from ultralytics import YOLO
 
 logger = logging.getLogger(__name__)
 
-FALLEN = "Fallen"
-_BOX_COLORS = {FALLEN: (0, 0, 255), "Sitting": (0, 165, 255), "Standing": (0, 255, 0)}
+FALLEN = "fallen"
+_BOX_COLORS = {FALLEN: (0, 0, 255), "sitting": (0, 165, 255), "standing": (0, 255, 0)}
 
 
 class FallDetectionModel:
@@ -20,7 +21,7 @@ class FallDetectionModel:
         self._conf = confidence
         self._device = device
 
-    def predict(self, frame: np.ndarray) -> list[dict]:
+    def predict(self, frame: np.ndarray) -> List[Dict]:
         """Run inference and return list of detections: {label, confidence, box}."""
         results = self._model.predict(frame, conf=self._conf, device=self._device, verbose=False)
         detections = []
@@ -34,7 +35,7 @@ class FallDetectionModel:
                 })
         return detections
 
-    def annotate(self, frame: np.ndarray, detections: list[dict]) -> np.ndarray:
+    def annotate(self, frame: np.ndarray, detections: List[Dict]) -> np.ndarray:
         """Draw bounding boxes and labels onto a copy of frame."""
         out = frame.copy()
         for d in detections:

@@ -3,9 +3,9 @@ import logging
 
 import cv2
 
-from .alert import AlertManager, build_alert_manager
-from .camera import BaseCamera, CameraFactory
-from .model import FALLEN, FallDetectionModel, build_model
+from .alert import build_alert_manager
+from .camera import CameraFactory
+from .model import FALLEN, build_model
 
 logger = logging.getLogger(__name__)
 
@@ -28,7 +28,13 @@ def run(cfg: dict) -> None:
 
             detections = model.predict(frame)
             is_fallen = any(d["label"] == FALLEN for d in detections)
-            alert_mgr.update(is_fallen, frame)
+
+            for d in detections:
+                logger.info("[%s] conf=%.2f", d["label"], d["confidence"])
+
+            alerted = alert_mgr.update(is_fallen, frame)
+            if alerted:
+                logger.warning("FALL ALERT FIRED")
 
             if show:
                 annotated = model.annotate(frame, detections)

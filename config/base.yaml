@@ -6,7 +6,7 @@ model:
 
 camera:
   backend: opencv  # opencv | realsense
-  source: 0        # int index, file path, or RTSP URL
+  source: 1        # int index, file path, or RTSP URL
   width: 640
   height: 480
   fps: 30

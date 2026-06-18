@@ -1,6 +1,8 @@
 """Camera backends: OpenCVCamera, RealSenseCamera, and CameraFactory."""
 import logging
+import time
 from abc import ABC, abstractmethod
+from typing import Optional, Union
 
 import cv2
 import numpy as np
@@ -10,7 +12,7 @@ logger = logging.getLogger(__name__)
 
 class BaseCamera(ABC):
     @abstractmethod
-    def read(self) -> np.ndarray | None:
+    def read(self) -> Optional[np.ndarray]:
         """Return a BGR frame or None on failure."""
 
     @abstractmethod
@@ -25,12 +27,12 @@ class BaseCamera(ABC):
 class OpenCVCamera(BaseCamera):
     """USB, file, or RTSP camera via cv2.VideoCapture."""
 
-    def __init__(self, source: int | str, width: int, height: int, fps: int) -> None:
+    def __init__(self, source: Union[int, str], width: int, height: int, fps: int) -> None:
         self._source = source
         self._width = width
         self._height = height
         self._fps = fps
-        self._cap: cv2.VideoCapture | None = None
+        self._cap: Optional[cv2.VideoCapture] = None
         self._open()
 
     def _open(self) -> None:
@@ -38,8 +40,14 @@ class OpenCVCamera(BaseCamera):
         self._cap.set(cv2.CAP_PROP_FRAME_WIDTH, self._width)
         self._cap.set(cv2.CAP_PROP_FRAME_HEIGHT, self._height)
         self._cap.set(cv2.CAP_PROP_FPS, self._fps)
+        # Prime the driver: discard up to 5 frames until one succeeds
+        for _ in range(5):
+            ok, _ = self._cap.read()
+            if ok:
+                break
+            time.sleep(0.2)
 
-    def read(self) -> np.ndarray | None:
+    def read(self) -> Optional[np.ndarray]:
         if self._cap is None or not self._cap.isOpened():
             return None
         ok, frame = self._cap.read()
@@ -67,7 +75,7 @@ class RealSenseCamera(BaseCamera):
         self._width = width
         self._height = height
         self._fps = fps
-        self._pipeline: object | None = None
+        self._pipeline: Optional[object] = None
         self._open()
 
     def _open(self) -> None:
@@ -77,7 +85,7 @@ class RealSenseCamera(BaseCamera):
         pipeline.start(cfg)
         self._pipeline = pipeline
 
-    def read(self) -> np.ndarray | None:
+    def read(self) -> Optional[np.ndarray]:
         if self._pipeline is None:
             return None
         frames = self._pipeline.wait_for_frames(timeout_ms=5000)

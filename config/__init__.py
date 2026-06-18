@@ -1,6 +1,7 @@
 """Config loading: base.yaml merged with optional override YAML + CLI args."""
 import argparse
 from pathlib import Path
+from typing import List, Optional
 
 import yaml
 
@@ -27,7 +28,7 @@ def _nested_set(d: dict, dotted_key: str, value) -> None:
     d[keys[-1]] = value
 
 
-def load_config(argv: list[str] | None = None) -> dict:
+def load_config(argv: Optional[List[str]] = None) -> dict:
     """Load and return merged config dict from YAML files and CLI flags."""
     parser = argparse.ArgumentParser(description="Fall detection")
     parser.add_argument("-c", "--config", default=None, help="Override YAML (e.g. config/g1.yaml)")
