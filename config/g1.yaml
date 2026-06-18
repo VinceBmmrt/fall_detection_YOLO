@@ -1,0 +1,13 @@
+# Unitree G1 EDU robot overrides (Jetson Orin NX, headless)
+camera:
+  source: 2       # USB webcam index on the robot
+  backend: opencv
+
+model:
+  device: cuda
+
+display:
+  show_window: false
+
+logging:
+  level: WARNING
